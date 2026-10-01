@@ -27,3 +27,16 @@ coldie-lab.github.io/
 - About: `https://coldie-lab.github.io/pages/about/`
 - Docs: `https://coldie-lab.github.io/pages/docs/`
 
+## 수식 작성
+
+공통 수식 명령은 `pages/content/math-preamble.tex`에서 관리합니다. 인라인 수식은 `$...$`, 블록 수식은 별도 줄의 `$$` 사이에 작성합니다.
+
+```md
+확률변수 $X \in \R$의 평균은 $\E[X]$입니다.
+
+$$
+\Var(X) = \E[(X - \E[X])^2]
+$$
+```
+
+브라우저 기반 MathJax는 완전한 LaTeX 배포판이 아니므로 임의의 `\usepackage`를 설치할 수는 없습니다. 기본 파일에 선언된 `amsmath`, `amssymb`, `mathtools`와 `\newcommand`를 사용할 수 있습니다.

@@ -1,0 +1,21 @@
+% Docs 전체에서 공통으로 사용하는 MathJax preamble입니다.
+% 브라우저에서는 TeX 배포판을 설치하지 않으므로 아래 package 선언은
+% MathJax 대응 확장을 사용한다는 문서화 용도로 처리됩니다.
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+% 공통 집합
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+% 공통 연산자
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\argmax}{\operatorname*{arg\,max}}
+\newcommand{\argmin}{\operatorname*{arg\,min}}
+
