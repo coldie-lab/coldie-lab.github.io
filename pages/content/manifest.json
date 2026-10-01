@@ -25,14 +25,13 @@
       "summary": "프로젝트의 맥락과 결정을 남기는 문서 구조"
     },
     {
-      "slug": "getting-started",
-      "file": "guide/getting-started.md",
+      "slug": "jun-huang-2026",
+      "file": "guide/jun-huang-2026.md",
       "title": "Jun Huang Studies",
-      "category": "안내/시작하기",
+      "category": "Study",
       "date": "2026-09-16",
       "tags": [
-        "안내",
-        "Markdown"
+        "Electrochemistry"
       ],
       "summary": "Researches and Treatments of Jun Huang"
     }
