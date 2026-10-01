@@ -24,13 +24,16 @@ Studying the researches and treatments of Jun Huang.
 ## Debates and Discussions
 
 ### Session 1
-#### Slide 10
-> Water-orientation model은 canonical ensemble로 기술되어야 할까, 아니면 grand canonical ensemble로 기술되어야 할까?
+이 논문은 Pt(111)–수용액 계면에서 실험적으로 측정된 double-layer capacitance의 거동과 고전적인 Gouy–Chapman–Stern model의 불일치로부터 출발하며, 더 정교한 physics로 재설계한 IHP (inner Helmholtz plane) 모델로 실험 결과를 다시 설명하는 논문이다. 
 
+- **Slide 10**: Debates
+> Water-orientation model은 canonical ensemble로 기술되어야 할까, 아니면 grand canonical ensemble로 기술되어야 할까?
 결론부터 말한다면, 개인적으로는 **canonical ensemble로 기술되어야 한다**는 입장이다. 거시적인 관점에서는 bulk phase에서 adsorbed solvent plane (ASP)으로 물 분자가 이동하기 때문에 ASP에서의 물 분자의 개수 $N_{\text{w}}$이 일정하지 않다고 해석할 수도 있지만, 논문을 읽을 적에 'ASP는 이미 물 분자의 이동이 완료된 상태'라고 생각했기 때문에 canonical ensemble로 기술되어야 한다고 생각한다. (관점의 차이라고 생각하며, Jun Huang에게도 직접 물어보고 싶긴 하다.)
 
 ### Session 2
-#### Slide 8–9
+이 논문은 전기화학적 전자 전달 반응에서 고려해야 할 다음의 이론들을 집대성하여 framework를 구성하고, 해당 framework가 어떻게 구동하는지 관찰하는 이론 연구 논문이다. 
+
+- **Slides 8–9**: Typo
 **Eq. 27**에서의 $t_{11}^1(d)$은 typo이며, $t_{11}^t(d)$로 수정한다. 
 
 ### Session 3
