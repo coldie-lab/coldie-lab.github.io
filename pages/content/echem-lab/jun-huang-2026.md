@@ -1,7 +1,7 @@
 <!-- raw-markdown -->
 ---
 title: Jun Huang Studies
-category: Study
+category: ECHEM LAB
 date: 2026-09-16
 tags: [Electrochemistry]
 summary: Researches and Treatments of Jun Huang
