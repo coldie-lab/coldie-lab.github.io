@@ -10,6 +10,15 @@
         "Electrochemistry"
       ],
       "summary": "Researches and Treatments of Jun Huang"
+    },
+    {
+      "slug": "my-gear",
+      "file": "guitar/my-gear.md",
+      "title": "my-gear",
+      "category": "미분류",
+      "date": "",
+      "tags": [],
+      "summary": ""
     }
   ]
 }
