@@ -187,35 +187,45 @@ img { display: block; max-width: 100%; }
 .toc-panel { padding: 34px 24px 24px 0; }
 .toc-panel > p { margin: 0 0 12px; color: var(--muted); font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; }
 .toc-panel nav { border-left: 1px solid var(--line); }
-.toc-panel a { display: flex; gap: 6px; padding: 5px 0 5px 13px; color: var(--muted); font-size: .77rem; line-height: 1.4; }
-.toc-panel a:hover { color: var(--accent-strong); }
-.toc-panel a span { color: var(--line-strong); }
 .toc-panel a {
-  display: grid;
-  grid-template-columns: 3.8em minmax(0, 1fr);
-  gap: 0.5em;
-  margin-left: 0;
+  display: flex;
+  align-items: baseline;
+  gap: .55em;
+  margin: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: var(--muted);
+  font-size: .77rem;
+  line-height: 1.45;
 }
-
+.toc-panel a:hover { color: var(--accent-strong); }
 .toc-panel a span {
-  text-align: right;
+  flex: 0 0 auto;
+  min-width: 0;
+  text-align: left;
   color: var(--line-strong);
   font-variant-numeric: tabular-nums;
 }
 
 /* ## 제목 */
 .toc-level-2 {
-  padding-left: 8px;
+  padding-left: 13px;
 }
 
 /* ### 제목 */
 .toc-level-3 {
-  padding-left: 24px;
+  padding-left: 29px;
 }
 
 /* #### 제목 */
 .toc-level-4 {
-  padding-left: 40px;
+  padding-left: 45px;
+}
+
+.article-content h2,
+.article-content h3,
+.article-content h4 {
+  scroll-margin-top: 155px;
 }
 .loading-state, .error-state { padding: 80px 0; color: var(--muted); }
 .empty-message { color: var(--muted); font-size: .82rem; }
