@@ -1,9 +1,9 @@
 <!-- raw-markdown -->
 ---
 title: Jun Huang Studies
-category: 안내/시작하기
+category: Study
 date: 2026-09-16
-tags: [안내, Markdown]
+tags: [Electrochemistry]
 summary: Researches and Treatments of Jun Huang
 ---
 
