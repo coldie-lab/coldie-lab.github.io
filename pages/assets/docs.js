@@ -152,6 +152,34 @@
         continue;
       }
       if (/^---+$/.test(line.trim())) { flushParagraph(); closeList(); html.push('<hr>'); continue; }
+      // 목록 항목 내부의 중첩 인용문
+      const nestedQuote = line.match(/^\s{2,}>\s?(.*)$/);
+      
+      if (nestedQuote && listType && html.length) {
+        const quoteLines = [nestedQuote[1]];
+      
+        // 이어지는 중첩 인용문도 하나로 합침
+        while (
+          i + 1 < lines.length &&
+          /^\s{2,}>\s?/.test(lines[i + 1])
+        ) {
+          i++;
+          quoteLines.push(
+            lines[i].replace(/^\s{2,}>\s?/, "")
+          );
+        }
+      
+        const lastIndex = html.length - 1;
+        const lastItem = html[lastIndex];
+      
+        if (lastItem.endsWith("</li>")) {
+          html[lastIndex] =
+            lastItem.slice(0, -5) +
+            `<blockquote>${inline(quoteLines.join(" "))}</blockquote></li>`;
+        }
+      
+        continue;
+      }
       if (/^>\s?/.test(line)) { flushParagraph(); closeList(); html.push(`<blockquote>${inline(line.replace(/^>\s?/, ''))}</blockquote>`); continue; }
       const item = line.match(/^\s*([-*]|\d+\.)\s+(.+)$/);
       if (item) {
