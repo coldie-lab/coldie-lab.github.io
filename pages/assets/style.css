@@ -60,7 +60,12 @@ img { display: block; max-width: 100%; }
 .home-hero { min-height: 690px; display: grid; grid-template-columns: .85fr 1.15fr; align-items: center; gap: clamp(50px, 8vw, 110px); padding-block: 74px; }
 .profile-visual { position: relative; width: min(100%, 420px); justify-self: end; }
 .profile-visual::before { content: ""; position: absolute; inset: -18px 18px 18px -18px; border: 1px solid var(--line-strong); z-index: -1; }
-.profile-visual img { width: 100%; aspect-ratio: 13 / 16; object-fit: cover; box-shadow: var(--shadow); }
+.profile-visual img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
 .photo-note { margin: 12px 0 0; color: var(--muted); font-size: .78rem; text-align: center; }
 .eyebrow, .section-kicker { margin: 0 0 16px; color: var(--accent-strong); font-size: .76rem; font-weight: 800; letter-spacing: .16em; }
 .hero-copy h1 { margin: 0; font-size: clamp(3.2rem, 7vw, 6.3rem); line-height: .98; letter-spacing: -.03em; font-weight: 350; }
