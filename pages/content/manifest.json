@@ -14,11 +14,14 @@
     {
       "slug": "my-gear",
       "file": "guitar/my-gear.md",
-      "title": "my-gear",
-      "category": "미분류",
-      "date": "",
-      "tags": [],
-      "summary": ""
+      "title": "My Gear",
+      "category": "Guitar",
+      "date": "2026-09-16",
+      "tags": [
+        "Guitar",
+        "Pedalboard"
+      ],
+      "summary": "Introduce My Gear for Guitar"
     }
   ]
 }
