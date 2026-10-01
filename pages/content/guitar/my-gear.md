@@ -32,7 +32,13 @@ Mighty Mite의 로즈우드 지판 넥과 Fender Japan Hybrid 2의 바디를 골
 
 ![4 September 2026](/pages/content/guitar/my-gear/260904.PNG){width=50%}
 
+### Crafter Godinus: Acoustic Guitar
+구매 시기 2018년 1월. (신품)
+
 ## Pedalboards
+세팅 시기 2026년 3월. 
+
+![25 March 2026](/pages/content/guitar/my-gear/260904.PNG){width=50%}
 
 ### RockboardⓇ Quad 4.1: Pedalboard
 구매 시기 2026년 3월. (중고)
