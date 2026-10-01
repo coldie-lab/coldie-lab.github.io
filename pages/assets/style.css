@@ -162,9 +162,9 @@ img { display: block; max-width: 100%; }
 .article-tags span { padding: 2px 8px; border: 1px solid var(--line); background: var(--surface); font-size: .72rem; }
 .article-content { padding-top: 24px; }
 .article-content h1 { display: none; }
-.article-content h2 { margin: 56px 0 17px; padding-bottom: 8px; border-bottom: 1px solid var(--line); font-size: 1.65rem; }
-.article-content h3 { margin: 36px 0 12px; font-size: 1.2rem; }
-.article-content h4 { margin: 28px 0 10px; font-size: 1.05rem; }
+.article-content h2 { margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 1px solid var(--line); font-size: 1.65rem; }
+.article-content h3 { margin: 20px 0 10px; font-size: 1.2rem; }
+.article-content h4 { margin: 10px 0 7px; font-size: 1.1rem; }
 .section-number { display: inline-block; margin-right: .42em; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
 .heading-anchor { margin-left: 8px; color: var(--line-strong); font-weight: 500; opacity: 0; }
 .article-content h2:hover .heading-anchor, .article-content h3:hover .heading-anchor, .heading-anchor:focus { opacity: 1; }
