@@ -175,7 +175,7 @@ img { display: block; max-width: 100%; }
 .article-content pre code { padding: 0; border: 0; background: none; color: inherit; }
 .article-content blockquote { margin: 24px 0; padding: 14px 18px; border-left: 4px solid var(--accent); background: var(--accent-soft); color: var(--muted); }
 .article-content ul, .article-content ol { padding-left: 24px; }
-.article-content li + li { margin-top: 6px; }
+.article-content li + li { margin-top: 4px; }
 .table-wrap { overflow-x: auto; margin: 24px 0; }
 .article-content table { width: 100%; border-collapse: collapse; font-size: .9rem; }
 .article-content th, .article-content td { padding: 10px 13px; border: 1px solid var(--line-strong); text-align: left; }
