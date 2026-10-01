@@ -1,0 +1,36 @@
+name: Update docs manifest
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "pages/content/**/*.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate manifest
+        run: node pages/scripts/generate-manifest.mjs
+
+      - name: Commit updated manifest
+        run: |
+          if git diff --quiet pages/content/manifest.json; then
+            echo "manifest.json 변경 없음"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add pages/content/manifest.json
+          git commit -m "docs: update manifest"
+          git push
