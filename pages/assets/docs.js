@@ -171,7 +171,7 @@
       const query = search.value.trim().toLowerCase();
       return !query || `${doc.title} ${doc.category} ${(doc.tags || []).join(' ')}`.toLowerCase().includes(query);
     });
-    count.textContent = `${filtered.length}개 문서`;
+    count.textContent = `${filtered.length} Document(s)`;
     const groups = filtered.reduce((result, doc) => {
       (result[doc.category] ||= []).push(doc);
       return result;
@@ -218,11 +218,11 @@
         <header class="article-header">
           <h1>${escapeHtml(parsed.meta.title || doc.title)}</h1>
           <p>${escapeHtml(parsed.meta.summary || doc.summary || '')}</p>
-          <div class="article-meta"><time datetime="${escapeHtml(doc.date)}">${escapeHtml(doc.date.replaceAll('-', '. '))}</time><span>분류: ${escapeHtml(doc.category)}</span></div>
+          <div class="article-meta"><time datetime="${escapeHtml(doc.date)}">${escapeHtml(doc.date.replaceAll('-', '. '))}</time><span>Sort: ${escapeHtml(doc.category)}</span></div>
           <div class="article-tags">${tags.map(tag => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
         </header>
         <div class="article-content">${markdown(parsed.body)}</div>
-        <footer class="article-footer"><p>이 문서는 Markdown 원본으로 관리됩니다.</p><a href="../content/${encodeURI(doc.file)}">원문 보기</a></footer>`;
+        <footer class="article-footer"><p>This document is maintained in original Markdown format.</p><a href="../content/${encodeURI(doc.file)}">Raw Markdown</a></footer>`;
       document.title = `${doc.title} · Coldie's Webpage · Docs`;
       if (updateHistory) history.pushState({slug: doc.slug}, '', `?doc=${encodeURIComponent(doc.slug)}`);
       buildTree(manifest); buildToc();
