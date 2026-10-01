@@ -1,45 +1,29 @@
 <!-- raw-markdown -->
 ---
-title: 이 아카이브를 사용하는 법
+title: Jun Huang Studies
 category: 안내/시작하기
-date: 2026-10-01
+date: 2026-09-16
 tags: [안내, Markdown]
-summary: 문서를 추가하고 분류 체계를 확장하는 방법
+summary: Researches and Treatments of Jun Huang
 ---
 
-# 이 아카이브를 사용하는 법
+# Jun Huang Studies
 
 이곳은 완성된 글만 모으는 블로그보다, 시간이 지나도 다시 찾을 수 있는 **개인 지식 아카이브**를 지향합니다. 문서 하나에는 하나의 중심 질문을 담고, 관련 문서는 분류와 링크로 연결합니다.
 
-## 새 문서 추가하기
+## Abstract
 
-`content` 폴더 아래에 Markdown 파일을 생성합니다. 파일 상단에는 제목, 분류, 날짜, 태그와 요약을 작성합니다.
+Studying the researches and treatments of Jun Huang. 
 
-```md
----
-title: 새 문서
-category: 개발/JavaScript
-date: 2026-10-01
-tags: [JavaScript, Web]
-summary: 문서 목록에 표시할 설명
----
+## Syllabus
 
-# 새 문서
-
-본문을 작성합니다.
-```
-
-그다음 `content/manifest.json`에 문서 정보를 추가하면 왼쪽 분류 목록과 검색 결과에 나타납니다.
-
-## 분류 원칙
-
-| 구분 | 예시 | 사용 기준 |
-| --- | --- | --- |
-| 분야 | 개발, 디자인, 연구 | 가장 넓은 관심 영역 |
-| 주제 | JavaScript, UX, 논문 | 문서의 직접적인 주제 |
-| 형태 | 튜토리얼, 회고, 템플릿 | 필요한 경우에만 사용 |
-
-분류는 `개발/웹`처럼 슬래시로 계층을 표시합니다. 지나치게 깊은 구조보다는 두 단계 정도가 찾기 쉽습니다.
+| Session | Date/Time | Theme | References |
+| --- | --- | --- | --- |
+| 1 | 16/09/26, 15:00 | IHP at Pt(111)–Aqueous Solution Interfaces | [*JACS Au* **2023**, *3* (2), 550–564.](https://doi.org/10.1021/jacsau.2c00650) |
+| 2 | 28/09/26, 14:30 | EDL to Kinetics: Mixed Quantum-Classical Treatments | [*J. Chem. Phys.* **2020**, *153* (16), 164707.](https://doi.org/10.1063/5.0009582) |
+| 3 | 06/10/26, 15:00 | Parameterization for Electron Transfer with *Ab Initio* DFT/MD | [*Chem. Rev.* **2026**, *126* (13), 7407–7464.](https://doi.org/10.1021/acs.chemrev.5c00926) |
+| 4 | 26/10/26, 14:00 | Water Splitting by EDL Overlapping | [J. Am. Chem. Soc. 2024, 146 (29), 19720–19727.](https://doi.org/10.1021/jacs.4c01070)<br>[ACS Energy Lett. 2026, 11 (8), 5743–5751.](https://doi.org/10.1021/acsenergylett.6c01492) |
+| 5 | 02/11/26, 14:00 | Impedance Responses of Electrochemical Interfaces | [J. Chem. Phys. 2022, 157 (18), 184704.](https://doi.org/10.1063/5.0119592) |
 
 ## 문서를 쓰는 기준
 
