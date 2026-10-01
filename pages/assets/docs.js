@@ -196,6 +196,13 @@
       for (let i = 0; i < depth; i++) if (counters[i] === 0) counters[i] = 1;
       const number = counters.slice(0, depth + 1).join('.');
       const title = heading.textContent.replace(/#$/, '').trim();
+      heading.id = `sec-${number}`;
+
+      // 본문 제목 옆 # 링크도 번호 주소로 변경
+      const headingAnchor = heading.querySelector('.heading-anchor');
+      if (headingAnchor) {
+        headingAnchor.setAttribute('href', `#${number}`);
+      }
       const numberNode = document.createElement('span');
       numberNode.className = 'section-number';
       numberNode.setAttribute('aria-hidden', 'true');
