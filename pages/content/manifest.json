@@ -1,32 +1,8 @@
 {
   "documents": [
     {
-      "slug": "markdown-style",
-      "file": "writing/markdown-style.md",
-      "title": "Markdown 문서 작성 규칙",
-      "category": "작성법/Markdown",
-      "date": "2026-10-01",
-      "tags": [
-        "Markdown",
-        "Writing"
-      ],
-      "summary": "일관된 문서를 위한 기본 작성 규칙"
-    },
-    {
-      "slug": "project-note",
-      "file": "projects/project-note.md",
-      "title": "프로젝트 기록 템플릿",
-      "category": "프로젝트/템플릿",
-      "date": "2026-09-28",
-      "tags": [
-        "Project",
-        "Template"
-      ],
-      "summary": "프로젝트의 맥락과 결정을 남기는 문서 구조"
-    },
-    {
       "slug": "jun-huang-2026",
-      "file": "guide/jun-huang-2026.md",
+      "file": "study/jun-huang-2026.md",
       "title": "Jun Huang Studies",
       "category": "Study",
       "date": "2026-09-16",
