@@ -206,6 +206,51 @@
     toc.innerHTML = entries.map(({heading, depth, number, title}) => `<a class="toc-level-${depth + 2}" href="#${heading.id}"><span>${number}</span>${escapeHtml(title)}</a>`).join('');
   }
 
+  function scrollToCurrentSection(behavior = 'smooth') {
+    const rawHash = location.hash.slice(1);
+    if (!rawHash) {
+      window.scrollTo({top: 0, behavior});
+      return;
+    }
+
+    let id;
+    try {
+      id = decodeURIComponent(rawHash);
+    } catch {
+      id = rawHash;
+    }
+
+    const target = document.getElementById(id);
+    if (target) {
+      target.scrollIntoView({behavior, block: 'start'});
+    } else {
+      window.scrollTo({top: 0, behavior});
+    }
+  }
+
+  function handleSectionLink(event) {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link) return;
+
+    const rawId = link.getAttribute('href').slice(1);
+    let id;
+    try {
+      id = decodeURIComponent(rawId);
+    } catch {
+      id = rawId;
+    }
+
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    event.preventDefault();
+
+    const url = new URL(window.location.href);
+    url.hash = id;
+    history.replaceState(history.state, '', url);
+    target.scrollIntoView({behavior: 'smooth', block: 'start'});
+  }
+
   async function loadDoc(slug, updateHistory = false) {
     const doc = manifest.find(item => item.slug === slug) || manifest[0];
     if (!doc) return;
@@ -227,8 +272,15 @@
       document.title = `${doc.title} · Coldie's Webpage · Docs`;
       if (updateHistory) history.pushState({slug: doc.slug}, '', `?doc=${encodeURIComponent(doc.slug)}`);
       buildTree(manifest); buildToc();
-      ensureMathJax().then(MathJax => MathJax.typesetPromise([article])).catch(error => console.warn(error.message));
-      closeMobileSidebar(); article.focus({preventScroll:true}); scrollTo({top:0, behavior:'smooth'});
+      try {
+        const MathJax = await ensureMathJax();
+        await MathJax.typesetPromise([article]);
+      } catch (error) {
+        console.warn(error.message);
+      }
+      closeMobileSidebar();
+      article.focus({preventScroll: true});
+      requestAnimationFrame(() => scrollToCurrentSection('smooth'));
     } catch (error) {
       article.innerHTML = `<div class="error-state"><h1>문서를 열 수 없습니다.</h1><p>${escapeHtml(error.message)}</p></div>`;
     }
@@ -242,6 +294,10 @@
   }
 
   search.addEventListener('input', () => buildTree(manifest));
+  toc.addEventListener('click', handleSectionLink);
+  article.addEventListener('click', event => {
+    if (event.target.closest('.heading-anchor')) handleSectionLink(event);
+  });
   tree.addEventListener('click', event => {
     const link = event.target.closest('a[data-slug]');
     if (!link) return;
