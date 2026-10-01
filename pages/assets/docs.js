@@ -75,6 +75,7 @@
       return prefix + token;
     });
     let out = escapeHtml(text);
+    out = out.replace(/&lt;br\s*\/?&gt;/gi, "<br>");
     out = out.replace(/`([^`]+)`/g, '<code>$1</code>');
     out = out.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
     out = out.replace(/\*([^*]+)\*/g, '<em>$1</em>');
