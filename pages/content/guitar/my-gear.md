@@ -13,10 +13,12 @@ Introduce my gear for guitar.
 
 ## Guitars
 
-### Fender Japan Hybrid 1: 60s Strat
+### Fender Japan Hybrid 1: 60s Stratocaster SSS
 구매 시기 2024년 10월. (중고)
+전형적인 스트랫이며, Fender USA Vintage '62의 복각 픽업이 장착되어 있다. 로즈우드 지판과 빈티지 복각 픽업이 만드는 따뜻한 음색이 매력적인 기타.
+![10 January 2025](./my-gear/IMG_1895.JPG)
 
-### 'Black Horsie': Custom Strat
+### 'Black Horsie': Custom Stratocaster HSH
 제작 시기 2026년 7월. 
 
 ## Pedalboards
