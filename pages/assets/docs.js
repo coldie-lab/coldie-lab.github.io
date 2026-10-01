@@ -146,7 +146,9 @@
         const level = heading[1].length;
         const title = heading[2].replace(/\*\*/g, '');
         const id = slugify(title);
-        html.push(`<h${level} id="${id}">${inline(title)}<a class="heading-anchor" href="#${id}" aria-label="${escapeHtml(title)} 바로가기">#</a></h${level}>`);
+        html.push(
+          `<h${level} id="${id}">${inline(title)}</h${level}>`
+        );
         continue;
       }
       if (/^---+$/.test(line.trim())) { flushParagraph(); closeList(); html.push('<hr>'); continue; }
