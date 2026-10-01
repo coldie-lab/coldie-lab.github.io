@@ -38,7 +38,7 @@ Mighty Mite의 로즈우드 지판 넥과 Fender Japan Hybrid 2의 바디를 골
 ## Pedalboards
 세팅 시기 2026년 3월. 
 
-![25 March 2026](/pages/content/guitar/my-gear/260904.PNG){width=50%}
+![25 March 2026](/pages/content/guitar/my-gear/IMG_2513.jpg){width=75%}
 
 ### RockboardⓇ Quad 4.1: Pedalboard
 구매 시기 2026년 3월. (중고)
