@@ -223,7 +223,7 @@
         </header>
         <div class="article-content">${markdown(parsed.body)}</div>
         <footer class="article-footer"><p>이 문서는 Markdown 원본으로 관리됩니다.</p><a href="../content/${encodeURI(doc.file)}">원문 보기</a></footer>`;
-      document.title = `${doc.title} · 김해찬 Docs`;
+      document.title = `${doc.title} · Coldie's Webpage · Docs`;
       if (updateHistory) history.pushState({slug: doc.slug}, '', `?doc=${encodeURIComponent(doc.slug)}`);
       buildTree(manifest); buildToc();
       ensureMathJax().then(MathJax => MathJax.typesetPromise([article])).catch(error => console.warn(error.message));
