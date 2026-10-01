@@ -23,18 +23,24 @@ Studying the researches and treatments of Jun Huang.
 
 ## Debates and Discussions
 
-- 제목만 보고도 문서의 질문을 짐작할 수 있게 씁니다.
-- 결론보다 맥락과 판단 근거를 함께 기록합니다.
-- 여러 문서가 겹치면 하나를 기준 문서로 삼고 나머지는 연결합니다.
-- 내용이 바뀌면 날짜와 관련 문서도 함께 확인합니다.
+### Session 1
+#### Slide 10
+> Water-orientation model은 canonical ensemble로 기술되어야 할까, 아니면 grand canonical ensemble로 기술되어야 할까?
 
-> 좋은 기록은 기억을 대신하는 것이 아니라, 다음 생각을 시작할 발판이 됩니다.
+결론부터 말한다면, 개인적으로는 **canonical ensemble로 기술되어야 한다**는 입장이다. 거시적인 관점에서는 bulk phase에서 adsorbed solvent plane (ASP)으로 물 분자가 이동하기 때문에 ASP에서의 물 분자의 개수 $N_{\text{w}}$이 일정하지 않다고 해석할 수도 있지만, 논문을 읽을 적에 'ASP는 이미 물 분자의 이동이 완료된 상태'라고 생각했기 때문에 canonical ensemble로 기술되어야 한다고 생각한다. 
+
+### Session 2
+#### Slide 8–9
+**Eq. 27**에서의 $t_{11}^1(d)$은 typo이며, $t_{11}^t(d)$로 수정한다. 
+
+### Session 3
+### Session 4
+### Session 5
 
 ## Resources
 
-- 제목만 보고도 문서의 질문을 짐작할 수 있게 씁니다.
-- 결론보다 맥락과 판단 근거를 함께 기록합니다.
-- 여러 문서가 겹치면 하나를 기준 문서로 삼고 나머지는 연결합니다.
-- 내용이 바뀌면 날짜와 관련 문서도 함께 확인합니다.
-
-> 좋은 기록은 기억을 대신하는 것이 아니라, 다음 생각을 시작할 발판이 됩니다.
+### Session 1
+### Session 2
+### Session 3
+### Session 4
+### Session 5
