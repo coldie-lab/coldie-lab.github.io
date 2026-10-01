@@ -75,6 +75,30 @@
       return prefix + token;
     });
     let out = escapeHtml(text);
+    // 1. 너비가 있는 이미지
+    out = out.replace(
+      /!\[([^\]]*)\]\(([^)\s]+)\)\{width=(\d+(?:px|%)?)\}/g,
+      (_, alt, src, width) => {
+        const normalizedWidth =
+          width.endsWith("%") || width.endsWith("px")
+            ? width
+            : `${width}px`;
+    
+        return `<img
+          class="doc-image"
+          src="${src}"
+          alt="${alt}"
+          loading="lazy"
+          style="width: ${normalizedWidth};"
+        >`;
+      }
+    );
+    
+    // 2. 일반 이미지
+    out = out.replace(
+      /!\[([^\]]*)\]\(([^)\s]+)\)/g,
+      '<img class="doc-image" src="$2" alt="$1" loading="lazy">'
+    );
     out = out.replace(/&lt;br\s*\/?&gt;/gi, "<br>");
     out = out.replace(/`([^`]+)`/g, '<code>$1</code>');
     out = out.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
