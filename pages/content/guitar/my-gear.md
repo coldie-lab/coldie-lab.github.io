@@ -16,21 +16,52 @@ Introduce my gear for guitar.
 ### Fender Japan Hybrid 1: 60s Stratocaster SSS
 구매 시기 2024년 10월. (중고)
 
-전형적인 스트랫이며, Fender USA Vintage '62의 복각 픽업이 장착되어 있다. 로즈우드 지판과 빈티지 복각 픽업이 만드는 따뜻한 음색이 매력적인 기타.
-
 ![10 January 2025](/pages/content/guitar/my-gear/IMG_1895.JPG){width=50%}
+
+#### Specs
+| Parts | Specs |
+| --- | --- |
+| Body | alder, polyester finish (flamingo pink color) |
+| Neck | maple, 25.5", U-shape, satin urethane finish | 
+| Fingerboard | rosewood, 9.84", 21 medium jumbo frets |
+| Nut | bone, 1.675" | 
+| Truss Rod | vintage style | 
+| Pickups | Fender USA '62 vintage pickups |
+| Electronics | 1 volume 2 tone (250kOhm) with neck+mid, 5-position blade |
+| Bridge | 2-point synchronized tremolo | 
+| Saddles | vintage style |
+| Head Machines | Gotoh magnum locking tuners |
+| Pickguard | 3-ply mint green, 11 holes ('62 style) |
+
+#### Description
+
+전형적인 빈티지 스펙의 스트라토캐스터. 로즈우드 지판과 빈티지 사양 픽업의 조합이 미드-부스트된 풍부한 소리를 낸다. 
 
 ### 'Black Horsie': Custom Stratocaster HSH
 제작 시기 2026년 7월. 
 
-Mighty Mite의 로즈우드 지판 넥과 Fender Japan Hybrid 2의 바디를 골자로 제작하였으며, 컨셉은 **새까만 기타**이다. 
-픽업은 깁슨 PAF 픽업을 복각한 Fluffy사의 *Handwound Luffybucker*와, Big Dipper 픽업을 복각한 Fluffy사의 *Big Dipper Replica*를 사용하였다. 
-픽가드는 윌로우스사에서 1PLY Black으로 주문제작하였고, 브릿지와 헤드머신은 Gotoh사의 것을 사용하였다. 
-
-특징으로는, 두 험버커 픽업에 대하여 3단 토글 스위치로 series(down)-split(middle)-parallel(up) modes를 조절할 수 있다. 
-미드-스쿱된 스트라토캐스터의 소리와 미드-부스트된 레스폴의 소리를 동시에 갖는다. 
-
 ![4 September 2026](/pages/content/guitar/my-gear/260904.PNG){width=50%}
+
+#### Specs
+| Parts | Specs |
+| --- | --- |
+| Body | alder, polyester finish (flamingo pink color) |
+| Neck | maple, 25.5", C-shape, gloss vintage finish | 
+| Fingerboard | rosewood, 9.5", 22 jumbo frets |
+| Nut | bone, 1.675" | 
+| Truss Rod | vintage style | 
+| Pickups | Fluffy 'LuffyBucker Handwound' at neck and bridge, Fluffy 'Big Dipper Replica' at middle |
+| Electronics | 1 volume 1 tone (500kOhm), 5-position blade, 2 of 3-way DPDT switch to humbuckers (series-split-parallel) |
+| Bridge | 2-point synchronized tremolo | 
+| Saddles | vintage style |
+| Head Machines | Gotoh vintage locking tuners |
+| Pickguard | 1-ply black, 11 holes ('62 style) |
+
+#### Description
+
+빈티지 사운드와 모던 스펙의 조합으로 이루어진 스트라토캐스터. **새까만 기타**를 목적으로 디자인되었다. 
+
+미드-부스트된 험버커와 미드-스쿱된 싱글 픽업의 조합이 매력적이며, parallel mode에서의 소리가 매력적이다. 
 
 ### Crafter Godinus: Acoustic Guitar
 구매 시기 2018년 1월. (신품)
