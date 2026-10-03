@@ -55,4 +55,4 @@ Studying the researches and treatments of Jun Huang.
 
 [^1]: Huang, J. Zooming into the Inner Helmholtz Plane of Pt(111)–Aqueous Solution Interfaces: Chemisorbed Water and Partially Charged Ions. *JACS Au* **2023**, *3* (2), 550–564. DOI: [10.1021/jacsau.2c00650](https://doi.org/10.1021/jacsau.2c00650).
 [^2]: Huang, J. Mixed quantum-classical treatment of electron transfer at electrocatalytic interfaces: Theoretical framework and conceptual analysis. *J. Chem. Phys.* **2020**, *153* (16), 164707. DOI: [10.1063/5.0009582](https://doi.org/10.1063/5.0009582).
-[^3]: Zhang, M.; Chen, Y.; Melander, M. M.; Huang, J. Electrochemical Electron Transfer: Key Concepts, Theories, and Parameterization via Atomistic Simulations. *Chem. Rev.* **2026**, *126* (13), 7407–7464. DOI: [10.1021/acs.chemrev.5c00926](https://doi.org/10.1021/acs.chemrev.5c00926)
+[^3]: Zhang, M.; Chen, Y.; Melander, M. M.; Huang, J. Electrochemical Electron Transfer: Key Concepts, Theories, and Parameterization via Atomistic Simulations. *Chem. Rev.* **2026**, *126* (13), 7407–7464. DOI: [10.1021/acs.chemrev.5c00926](https://doi.org/10.1021/acs.chemrev.5c00926).
