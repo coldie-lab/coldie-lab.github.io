@@ -19,6 +19,7 @@ Introduce my gear for guitar.
 ![10 January 2025](/pages/content/guitar/my-gear/IMG_1895.JPG){width=50%}
 
 #### Specs
+
 | Parts | Specs |
 | --- | --- |
 | Body | alder, polyester finish (flamingo pink color) |
@@ -43,6 +44,7 @@ Introduce my gear for guitar.
 ![4 September 2026](/pages/content/guitar/my-gear/260904.PNG){width=50%}
 
 #### Specs
+
 | Parts | Specs |
 | --- | --- |
 | Body | alder, polyester finish (flamingo pink color) |
