@@ -189,12 +189,6 @@
     };
   }
 
-  /*
-   * Markdown에서 허용한 HTML을 최종적으로 검사한다.
-   *
-   * 글자색, 글자 크기, 배경색, 정렬 등의 style은 허용한다.
-   * 스크립트와 이벤트 실행 속성은 제거한다.
-   */
   function sanitizeRenderedHtml(html) {
     const template =
       document.createElement('template');
@@ -220,9 +214,6 @@
             const value =
               attribute.value.trim();
 
-            /*
-             * onclick, onerror, onload 등 차단
-             */
             if (
               name.startsWith('on') ||
               name === 'srcdoc'
@@ -234,9 +225,6 @@
               return;
             }
 
-            /*
-             * 실행 가능한 URL 차단
-             */
             if (
               [
                 'href',
@@ -272,10 +260,6 @@
               return;
             }
 
-            /*
-             * 일반 CSS style은 허용한다.
-             * CSS 안의 코드 실행 표현만 차단한다.
-             */
             if (name === 'style') {
               const normalizedStyle =
                 value
@@ -313,12 +297,8 @@
     const rawHtmlFragments = [];
 
     /*
-     * 사용자가 Markdown 안에 직접 작성한
-     * HTML 태그와 HTML 엔티티를 보호한다.
-     *
-     * 예:
-     * <span style="color:red;">내용</span>
-     * &nbsp;
+     * Markdown 안의 HTML 태그와
+     * HTML 엔티티를 보호한다.
      */
     text = text.replace(
       /<!--[\s\S]*?-->|<\/?[A-Za-z][^<>]*>|&(?:#\d+|#x[\da-f]+|[a-z][\w]+);/gi,
@@ -381,9 +361,7 @@
     /*
      * 너비를 지정한 이미지
      *
-     * 예:
      * ![설명](image.jpg){width=30%}
-     * ![설명](image.jpg){width=400px}
      */
     out = out.replace(
       /!\[([^\]]*)\]\(([^)\s]+)\)\{width=(\d+(?:px|%)?)\}/g,
@@ -475,7 +453,7 @@
     );
 
     /*
-     * 인라인 수식 복원
+     * 수식 복원
      */
     expressions.forEach(
       (expression, index) => {
@@ -528,8 +506,7 @@
     const lines = [];
 
     /*
-     * [^name]: 내용 형식의 각주 정의를
-     * 일반 본문에서 분리한다.
+     * 각주 정의를 본문에서 분리한다.
      */
     for (
       let i = 0;
@@ -553,10 +530,6 @@
         definition[2]
       ];
 
-      /*
-       * 각주 정의 다음에 들여쓴 행이 있으면
-       * 같은 각주의 연속 내용으로 처리한다.
-       */
       while (
         i + 1 < sourceLines.length &&
         /^(?: {2,}|\t)\S/.test(
@@ -570,9 +543,6 @@
         );
       }
 
-      /*
-       * 중복 정의가 있으면 첫 정의를 사용한다.
-       */
       if (
         !footnoteDefinitions.has(label)
       ) {
@@ -599,16 +569,10 @@
     let inMath = false;
     let math = [];
 
-    /*
-     * 본문의 [^name]을 각주 링크로 변환한다.
-     */
     const renderFootnoteReference = (
       label,
       original
     ) => {
-      /*
-       * 정의되지 않은 각주는 변환하지 않는다.
-       */
       if (
         !footnoteDefinitions.has(label)
       ) {
@@ -618,10 +582,6 @@
       let footnote =
         footnotesByLabel.get(label);
 
-      /*
-       * 본문에서 처음 등장한 각주에
-       * 다음 번호를 부여한다.
-       */
       if (!footnote) {
         footnote = {
           label,
@@ -640,10 +600,6 @@
         );
       }
 
-      /*
-       * 같은 각주의 각 참조 지점에
-       * 고유 ID를 부여한다.
-       */
       const occurrence =
         footnote.referenceIds.length + 1;
 
@@ -783,11 +739,13 @@
 
       /*
        * 표 시작
+       *
+       * 마지막 | 뒤의 공백도 허용한다.
        */
       if (
-        /^\|.+\|$/.test(line) &&
+        /^\s*\|.+\|\s*$/.test(line) &&
         i + 1 < lines.length &&
-        /^\|?\s*:?-+/.test(
+        /^\s*\|?\s*:?-+/.test(
           lines[i + 1]
         )
       ) {
@@ -795,7 +753,12 @@
         closeList();
         closeTable();
 
+        /*
+         * trim()으로 행 양 끝 공백을 제거한 후
+         * 셀을 분리한다.
+         */
         const headers = line
+          .trim()
           .split('|')
           .slice(1, -1);
 
@@ -826,12 +789,15 @@
 
       /*
        * 표 데이터 행
+       *
+       * 마지막 | 뒤의 공백도 허용한다.
        */
       if (
         inTable &&
-        /^\|.+\|$/.test(line)
+        /^\s*\|.+\|\s*$/.test(line)
       ) {
         const cells = line
+          .trim()
           .split('|')
           .slice(1, -1);
 
@@ -1021,9 +987,6 @@
     closeList();
     closeTable();
 
-    /*
-     * 닫히지 않은 코드 블록 처리
-     */
     if (inCode) {
       html.push(
         `<pre>` +
@@ -1036,9 +999,6 @@
       );
     }
 
-    /*
-     * 닫히지 않은 수식 블록 처리
-     */
     if (inMath) {
       html.push(
         `<div class="math-block">` +
@@ -1454,10 +1414,6 @@
           ? parsed.meta.tags
           : doc.tags || [];
 
-      /*
-       * Markdown을 HTML로 변환한 다음
-       * 안전 검사를 수행한다.
-       */
       const renderedBody =
         sanitizeRenderedHtml(
           markdown(parsed.body)
@@ -1641,10 +1597,6 @@
     handleSectionLink
   );
 
-  /*
-   * TOC, 제목, 각주 및 각주 복귀 링크를
-   * 같은 방식으로 처리한다.
-   */
   article.addEventListener(
     'click',
     event => {
