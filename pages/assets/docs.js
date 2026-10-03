@@ -8,18 +8,22 @@
   const sidebarToggle = document.querySelector('#sidebarToggle');
   const closeSidebar = document.querySelector('#closeSidebar');
   const backdrop = document.querySelector('#sidebarBackdrop');
+
   let manifest = [];
   let mathPreamble = '';
   let mathJaxPromise;
 
   const escapeHtml = (value = '') =>
-    value.replace(/[&<>'"]/g, char => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      "'": '&#39;',
-      '"': '&quot;'
-    })[char]);
+    value.replace(
+      /[&<>'"]/g,
+      char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      })[char]
+    );
 
   const slugify = value =>
     value
@@ -31,13 +35,21 @@
   function usablePreamble(source) {
     return source
       .replace(/^\s*%.*$/gm, '')
-      .replace(/^\s*\\usepackage(?:\[[^\]]*\])?\{[^}]+\}\s*$/gm, '')
+      .replace(
+        /^\s*\\usepackage(?:\[[^\]]*\])?\{[^}]+\}\s*$/gm,
+        ''
+      )
       .trim();
   }
 
   function mathSource(expression) {
-    const prefix = mathPreamble ? `${mathPreamble}\n` : '';
-    return escapeHtml(prefix + expression.trim());
+    const prefix = mathPreamble
+      ? `${mathPreamble}\n`
+      : '';
+
+    return escapeHtml(
+      prefix + expression.trim()
+    );
   }
 
   function ensureMathJax() {
@@ -51,15 +63,31 @@
 
     window.MathJax = {
       loader: {
-        load: ['[tex]/ams', '[tex]/newcommand', '[tex]/mathtools']
+        load: [
+          '[tex]/ams',
+          '[tex]/newcommand',
+          '[tex]/mathtools'
+        ]
       },
+
       tex: {
         packages: {
-          '[+]': ['ams', 'newcommand', 'mathtools']
+          '[+]': [
+            'ams',
+            'newcommand',
+            'mathtools'
+          ]
         },
-        inlineMath: [['\\(', '\\)']],
-        displayMath: [['\\[', '\\]']]
+
+        inlineMath: [
+          ['\\(', '\\)']
+        ],
+
+        displayMath: [
+          ['\\[', '\\]']
+        ]
       },
+
       options: {
         skipHtmlTags: [
           'script',
@@ -72,24 +100,38 @@
       }
     };
 
-    mathJaxPromise = new Promise((resolve, reject) => {
-      const script = document.createElement('script');
+    mathJaxPromise = new Promise(
+      (resolve, reject) => {
+        const script =
+          document.createElement('script');
 
-      script.src =
-        'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';
-      script.async = true;
-      script.onload = () => resolve(window.MathJax);
-      script.onerror = () =>
-        reject(new Error('수식 렌더러를 불러오지 못했습니다.'));
+        script.src =
+          'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';
 
-      document.head.append(script);
-    });
+        script.async = true;
+
+        script.onload = () =>
+          resolve(window.MathJax);
+
+        script.onerror = () =>
+          reject(
+            new Error(
+              '수식 렌더러를 불러오지 못했습니다.'
+            )
+          );
+
+        document.head.append(script);
+      }
+    );
 
     return mathJaxPromise;
   }
 
   function parseFrontMatter(source) {
-    source = source.replace(/^<!-- raw-markdown -->\s*/, '');
+    source = source.replace(
+      /^<!-- raw-markdown -->\s*/,
+      ''
+    );
 
     if (!source.startsWith('---\n')) {
       return {
@@ -98,7 +140,10 @@
       };
     }
 
-    const end = source.indexOf('\n---\n', 4);
+    const end = source.indexOf(
+      '\n---\n',
+      4
+    );
 
     if (end < 0) {
       return {
@@ -119,10 +164,16 @@
           return;
         }
 
-        const key = line.slice(0, split).trim();
-        let value = line.slice(split + 1).trim();
+        const key =
+          line.slice(0, split).trim();
 
-        if (value.startsWith('[') && value.endsWith(']')) {
+        let value =
+          line.slice(split + 1).trim();
+
+        if (
+          value.startsWith('[') &&
+          value.endsWith(']')
+        ) {
           value = value
             .slice(1, -1)
             .split(',')
@@ -138,22 +189,161 @@
     };
   }
 
-  function inline(text, renderFootnoteReference = null) {
+  /*
+   * Markdown에서 허용한 HTML을 최종적으로 검사한다.
+   *
+   * 글자색, 글자 크기, 배경색, 정렬 등의 style은 허용한다.
+   * 스크립트와 이벤트 실행 속성은 제거한다.
+   */
+  function sanitizeRenderedHtml(html) {
+    const template =
+      document.createElement('template');
+
+    template.innerHTML = html;
+
+    template.content
+      .querySelectorAll(
+        'script, iframe, object, embed, base, link, meta, form'
+      )
+      .forEach(element => {
+        element.remove();
+      });
+
+    template.content
+      .querySelectorAll('*')
+      .forEach(element => {
+        [...element.attributes]
+          .forEach(attribute => {
+            const name =
+              attribute.name.toLowerCase();
+
+            const value =
+              attribute.value.trim();
+
+            /*
+             * onclick, onerror, onload 등 차단
+             */
+            if (
+              name.startsWith('on') ||
+              name === 'srcdoc'
+            ) {
+              element.removeAttribute(
+                attribute.name
+              );
+
+              return;
+            }
+
+            /*
+             * 실행 가능한 URL 차단
+             */
+            if (
+              [
+                'href',
+                'src',
+                'xlink:href',
+                'action',
+                'formaction'
+              ].includes(name)
+            ) {
+              const compactValue = value
+                .replace(
+                  /[\u0000-\u0020\u007f]+/g,
+                  ''
+                )
+                .toLowerCase();
+
+              if (
+                compactValue.startsWith(
+                  'javascript:'
+                ) ||
+                compactValue.startsWith(
+                  'vbscript:'
+                ) ||
+                compactValue.startsWith(
+                  'data:text/html'
+                )
+              ) {
+                element.removeAttribute(
+                  attribute.name
+                );
+              }
+
+              return;
+            }
+
+            /*
+             * 일반 CSS style은 허용한다.
+             * CSS 안의 코드 실행 표현만 차단한다.
+             */
+            if (name === 'style') {
+              const normalizedStyle =
+                value
+                  .replace(
+                    /\/\*[\s\S]*?\*\//g,
+                    ''
+                  )
+                  .toLowerCase();
+
+              if (
+                /expression\s*\(/.test(
+                  normalizedStyle
+                ) ||
+                /(?:url|@import)[^;]*javascript\s*:/.test(
+                  normalizedStyle
+                )
+              ) {
+                element.removeAttribute(
+                  attribute.name
+                );
+              }
+            }
+          });
+      });
+
+    return template.innerHTML;
+  }
+
+  function inline(
+    text,
+    renderFootnoteReference = null
+  ) {
     const expressions = [];
     const footnoteReferences = [];
+    const rawHtmlFragments = [];
 
     /*
-     * 각주 참조를 Markdown의 다른 치환 작업에서 보호하기 위해
-     * 임시 토큰으로 변경한다.
+     * 사용자가 Markdown 안에 직접 작성한
+     * HTML 태그와 HTML 엔티티를 보호한다.
+     *
+     * 예:
+     * <span style="color:red;">내용</span>
+     * &nbsp;
+     */
+    text = text.replace(
+      /<!--[\s\S]*?-->|<\/?[A-Za-z][^<>]*>|&(?:#\d+|#x[\da-f]+|[a-z][\w]+);/gi,
+      fragment => {
+        const token =
+          `@@RAWHTML${rawHtmlFragments.length}@@`;
+
+        rawHtmlFragments.push(fragment);
+
+        return token;
+      }
+    );
+
+    /*
+     * 각주 참조를 보호한다.
      */
     if (renderFootnoteReference) {
       text = text.replace(
         /\[\^([^\]]+)\]/g,
         (match, label) => {
-          const rendered = renderFootnoteReference(
-            label.trim(),
-            match
-          );
+          const rendered =
+            renderFootnoteReference(
+              label.trim(),
+              match
+            );
 
           if (rendered === match) {
             return match;
@@ -162,7 +352,9 @@
           const token =
             `@@FOOTNOTE${footnoteReferences.length}@@`;
 
-          footnoteReferences.push(rendered);
+          footnoteReferences.push(
+            rendered
+          );
 
           return token;
         }
@@ -170,12 +362,13 @@
     }
 
     /*
-     * 인라인 수식을 임시 토큰으로 변경한다.
+     * 인라인 수식을 보호한다.
      */
     text = text.replace(
       /(^|[^\\])\$([^$\n]+)\$/g,
       (_, prefix, expression) => {
-        const token = `@@MATH${expressions.length}@@`;
+        const token =
+          `@@MATH${expressions.length}@@`;
 
         expressions.push(expression);
 
@@ -189,14 +382,15 @@
      * 너비를 지정한 이미지
      *
      * 예:
-     * ![설명](/pages/content/image.jpg){width=30%}
-     * ![설명](/pages/content/image.jpg){width=400px}
+     * ![설명](image.jpg){width=30%}
+     * ![설명](image.jpg){width=400px}
      */
     out = out.replace(
       /!\[([^\]]*)\]\(([^)\s]+)\)\{width=(\d+(?:px|%)?)\}/g,
       (_, alt, src, width) => {
         const normalizedWidth =
-          width.endsWith('%') || width.endsWith('px')
+          width.endsWith('%') ||
+          width.endsWith('px')
             ? width
             : `${width}px`;
 
@@ -216,11 +410,17 @@
      */
     out = out.replace(
       /!\[([^\]]*)\]\(([^)\s]+)\)/g,
-      '<img class="doc-image" src="$2" alt="$1" loading="lazy">'
+      (
+        '<img ' +
+        'class="doc-image" ' +
+        'src="$2" ' +
+        'alt="$1" ' +
+        'loading="lazy">'
+      )
     );
 
     /*
-     * 표 안에서도 <br>을 사용할 수 있도록 처리한다.
+     * 줄바꿈
      */
     out = out.replace(
       /&lt;br\s*\/?&gt;/gi,
@@ -236,7 +436,7 @@
     );
 
     /*
-     * 굵게
+     * 굵은 글씨
      */
     out = out.replace(
       /\*\*([^*]+)\*\*/g,
@@ -256,11 +456,18 @@
      */
     out = out.replace(
       /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
-      '<a href="$2" target="_blank" rel="noopener">$1</a>'
+      (
+        '<a ' +
+        'href="$2" ' +
+        'target="_blank" ' +
+        'rel="noopener">' +
+        '$1' +
+        '</a>'
+      )
     );
 
     /*
-     * 내부 및 상대 경로 링크
+     * 내부 및 상대 링크
      */
     out = out.replace(
       /\[([^\]]+)\]\(([^\s)]+)\)/g,
@@ -270,22 +477,42 @@
     /*
      * 인라인 수식 복원
      */
-    expressions.forEach((expression, index) => {
-      out = out.replace(
-        `@@MATH${index}@@`,
-        `<span class="math-inline">\\(${mathSource(expression)}\\)</span>`
-      );
-    });
+    expressions.forEach(
+      (expression, index) => {
+        out = out.replace(
+          `@@MATH${index}@@`,
+          (
+            '<span class="math-inline">' +
+            `\\(${mathSource(expression)}\\)` +
+            '</span>'
+          )
+        );
+      }
+    );
 
     /*
      * 각주 참조 복원
      */
-    footnoteReferences.forEach((reference, index) => {
-      out = out.replace(
-        `@@FOOTNOTE${index}@@`,
-        reference
-      );
-    });
+    footnoteReferences.forEach(
+      (reference, index) => {
+        out = out.replace(
+          `@@FOOTNOTE${index}@@`,
+          reference
+        );
+      }
+    );
+
+    /*
+     * HTML 태그 및 엔티티 복원
+     */
+    rawHtmlFragments.forEach(
+      (fragment, index) => {
+        out = out.replace(
+          `@@RAWHTML${index}@@`,
+          fragment
+        );
+      }
+    );
 
     return out;
   }
@@ -295,44 +522,60 @@
       .replace(/\r/g, '')
       .split('\n');
 
-    const footnoteDefinitions = new Map();
+    const footnoteDefinitions =
+      new Map();
+
     const lines = [];
 
     /*
-     * 각주 정의를 본문에서 분리한다.
-     *
-     * 예:
-     * [^source]: 각주 내용
-     *
-     * 정의 바로 다음에 들여쓴 행이 있으면
-     * 같은 각주의 연속 내용으로 처리한다.
+     * [^name]: 내용 형식의 각주 정의를
+     * 일반 본문에서 분리한다.
      */
-    for (let i = 0; i < sourceLines.length; i++) {
-      const definition = sourceLines[i].match(
-        /^\[\^([^\]]+)\]:\s*(.*)$/
-      );
+    for (
+      let i = 0;
+      i < sourceLines.length;
+      i++
+    ) {
+      const definition =
+        sourceLines[i].match(
+          /^\[\^([^\]]+)\]:\s*(.*)$/
+        );
 
       if (!definition) {
         lines.push(sourceLines[i]);
         continue;
       }
 
-      const label = definition[1].trim();
-      const definitionLines = [definition[2]];
+      const label =
+        definition[1].trim();
 
+      const definitionLines = [
+        definition[2]
+      ];
+
+      /*
+       * 각주 정의 다음에 들여쓴 행이 있으면
+       * 같은 각주의 연속 내용으로 처리한다.
+       */
       while (
         i + 1 < sourceLines.length &&
-        /^(?: {2,}|\t)\S/.test(sourceLines[i + 1])
+        /^(?: {2,}|\t)\S/.test(
+          sourceLines[i + 1]
+        )
       ) {
         i++;
-        definitionLines.push(sourceLines[i].trim());
+
+        definitionLines.push(
+          sourceLines[i].trim()
+        );
       }
 
       /*
-       * 같은 이름의 정의가 중복되면
-       * 처음 작성된 정의를 사용한다.
+       * 중복 정의가 있으면 첫 정의를 사용한다.
        */
-      if (!footnoteDefinitions.has(label)) {
+      if (
+        !footnoteDefinitions.has(label)
+      ) {
         footnoteDefinitions.set(
           label,
           definitionLines.join(' ')
@@ -342,14 +585,9 @@
 
     const html = [];
 
-    /*
-     * 각주 이름과 화면 번호를 연결한다.
-     */
-    const footnotesByLabel = new Map();
+    const footnotesByLabel =
+      new Map();
 
-    /*
-     * 본문에서 처음 등장한 순서대로 각주를 저장한다.
-     */
     const footnotesInOrder = [];
 
     let paragraph = [];
@@ -362,38 +600,49 @@
     let math = [];
 
     /*
-     * 본문의 [^name]을 각주 번호 링크로 변환한다.
+     * 본문의 [^name]을 각주 링크로 변환한다.
      */
     const renderFootnoteReference = (
       label,
       original
     ) => {
       /*
-       * 대응하는 정의가 없으면 원문을 그대로 표시한다.
+       * 정의되지 않은 각주는 변환하지 않는다.
        */
-      if (!footnoteDefinitions.has(label)) {
+      if (
+        !footnoteDefinitions.has(label)
+      ) {
         return original;
       }
 
-      let footnote = footnotesByLabel.get(label);
+      let footnote =
+        footnotesByLabel.get(label);
 
       /*
-       * 처음 등장한 각주에는 새 번호를 부여한다.
+       * 본문에서 처음 등장한 각주에
+       * 다음 번호를 부여한다.
        */
       if (!footnote) {
         footnote = {
           label,
-          number: footnotesInOrder.length + 1,
+          number:
+            footnotesInOrder.length + 1,
           referenceIds: []
         };
 
-        footnotesByLabel.set(label, footnote);
-        footnotesInOrder.push(footnote);
+        footnotesByLabel.set(
+          label,
+          footnote
+        );
+
+        footnotesInOrder.push(
+          footnote
+        );
       }
 
       /*
-       * 같은 각주를 여러 번 참조할 수 있도록
-       * 각각의 참조 위치에 별도 ID를 부여한다.
+       * 같은 각주의 각 참조 지점에
+       * 고유 ID를 부여한다.
        */
       const occurrence =
         footnote.referenceIds.length + 1;
@@ -401,7 +650,9 @@
       const referenceId =
         `fnref-${footnote.number}-${occurrence}`;
 
-      footnote.referenceIds.push(referenceId);
+      footnote.referenceIds.push(
+        referenceId
+      );
 
       return (
         `<sup ` +
@@ -417,12 +668,19 @@
     };
 
     const renderInline = text =>
-      inline(text, renderFootnoteReference);
+      inline(
+        text,
+        renderFootnoteReference
+      );
 
     const flushParagraph = () => {
       if (paragraph.length) {
         html.push(
-          `<p>${renderInline(paragraph.join(' '))}</p>`
+          `<p>` +
+          `${renderInline(
+            paragraph.join(' ')
+          )}` +
+          `</p>`
         );
       }
 
@@ -439,13 +697,19 @@
 
     const closeTable = () => {
       if (inTable) {
-        html.push('</tbody></table></div>');
+        html.push(
+          '</tbody></table></div>'
+        );
       }
 
       inTable = false;
     };
 
-    for (let i = 0; i < lines.length; i++) {
+    for (
+      let i = 0;
+      i < lines.length;
+      i++
+    ) {
       const line = lines[i];
 
       /*
@@ -462,7 +726,9 @@
         } else {
           html.push(
             `<div class="math-block">` +
-            `\\[${mathSource(math.join('\n'))}\\]` +
+            `\\[${mathSource(
+              math.join('\n')
+            )}\\]` +
             `</div>`
           );
 
@@ -487,13 +753,19 @@
 
         if (!inCode) {
           inCode = true;
-          codeLang = line.slice(3).trim();
+          codeLang =
+            line.slice(3).trim();
           code = [];
         } else {
           html.push(
             `<pre>` +
-            `<code class="language-${escapeHtml(codeLang)}">` +
-            `${escapeHtml(code.join('\n'))}` +
+            `<code ` +
+            `class="language-${escapeHtml(
+              codeLang
+            )}">` +
+            `${escapeHtml(
+              code.join('\n')
+            )}` +
             `</code>` +
             `</pre>`
           );
@@ -515,7 +787,9 @@
       if (
         /^\|.+\|$/.test(line) &&
         i + 1 < lines.length &&
-        /^\|?\s*:?-+/.test(lines[i + 1])
+        /^\|?\s*:?-+/.test(
+          lines[i + 1]
+        )
       ) {
         flushParagraph();
         closeList();
@@ -532,7 +806,11 @@
           '<tr>' +
           headers
             .map(header =>
-              `<th>${renderInline(header.trim())}</th>`
+              `<th>` +
+              `${renderInline(
+                header.trim()
+              )}` +
+              `</th>`
             )
             .join('') +
           '</tr>' +
@@ -547,7 +825,7 @@
       }
 
       /*
-       * 표의 데이터 행
+       * 표 데이터 행
        */
       if (
         inTable &&
@@ -561,7 +839,11 @@
           '<tr>' +
           cells
             .map(cell =>
-              `<td>${renderInline(cell.trim())}</td>`
+              `<td>` +
+              `${renderInline(
+                cell.trim()
+              )}` +
+              `</td>`
             )
             .join('') +
           '</tr>'
@@ -583,8 +865,15 @@
         flushParagraph();
         closeList();
 
-        const level = heading[1].length;
-        const title = heading[2].replace(/\*\*/g, '');
+        const level =
+          heading[1].length;
+
+        const title =
+          heading[2].replace(
+            /\*\*/g,
+            ''
+          );
+
         const id = slugify(title);
 
         html.push(
@@ -599,7 +888,9 @@
       /*
        * 가로선
        */
-      if (/^---+$/.test(line.trim())) {
+      if (
+        /^---+$/.test(line.trim())
+      ) {
         flushParagraph();
         closeList();
         html.push('<hr>');
@@ -609,20 +900,25 @@
       /*
        * 목록 항목 안의 중첩 인용문
        */
-      const nestedQuote = line.match(
-        /^\s{2,}>\s?(.*)$/
-      );
+      const nestedQuote =
+        line.match(
+          /^\s{2,}>\s?(.*)$/
+        );
 
       if (
         nestedQuote &&
         listType &&
         html.length
       ) {
-        const quoteLines = [nestedQuote[1]];
+        const quoteLines = [
+          nestedQuote[1]
+        ];
 
         while (
           i + 1 < lines.length &&
-          /^\s{2,}>\s?/.test(lines[i + 1])
+          /^\s{2,}>\s?/.test(
+            lines[i + 1]
+          )
         ) {
           i++;
 
@@ -634,14 +930,21 @@
           );
         }
 
-        const lastIndex = html.length - 1;
-        const lastItem = html[lastIndex];
+        const lastIndex =
+          html.length - 1;
 
-        if (lastItem.endsWith('</li>')) {
+        const lastItem =
+          html[lastIndex];
+
+        if (
+          lastItem.endsWith('</li>')
+        ) {
           html[lastIndex] =
             lastItem.slice(0, -5) +
             `<blockquote>` +
-            `${renderInline(quoteLines.join(' '))}` +
+            `${renderInline(
+              quoteLines.join(' ')
+            )}` +
             `</blockquote>` +
             `</li>`;
         }
@@ -658,7 +961,12 @@
 
         html.push(
           `<blockquote>` +
-          `${renderInline(line.replace(/^>\s?/, ''))}` +
+          `${renderInline(
+            line.replace(
+              /^>\s?/,
+              ''
+            )
+          )}` +
           `</blockquote>`
         );
 
@@ -666,7 +974,7 @@
       }
 
       /*
-       * 순서 없는 목록 및 순서 있는 목록
+       * 목록
        */
       const item = line.match(
         /^\s*([-*]|\d+\.)\s+(.+)$/
@@ -687,7 +995,9 @@
         }
 
         html.push(
-          `<li>${renderInline(item[2])}</li>`
+          `<li>` +
+          `${renderInline(item[2])}` +
+          `</li>`
         );
 
         continue;
@@ -702,7 +1012,9 @@
         continue;
       }
 
-      paragraph.push(line.trim());
+      paragraph.push(
+        line.trim()
+      );
     }
 
     flushParagraph();
@@ -715,69 +1027,91 @@
     if (inCode) {
       html.push(
         `<pre>` +
-        `<code>${escapeHtml(code.join('\n'))}</code>` +
+        `<code>` +
+        `${escapeHtml(
+          code.join('\n')
+        )}` +
+        `</code>` +
         `</pre>`
       );
     }
 
     /*
-     * 닫히지 않은 블록 수식 처리
+     * 닫히지 않은 수식 블록 처리
      */
     if (inMath) {
       html.push(
         `<div class="math-block">` +
-        `\\[${mathSource(math.join('\n'))}\\]` +
+        `\\[${mathSource(
+          math.join('\n')
+        )}\\]` +
         `</div>`
       );
     }
 
     /*
-     * 문서 하단에 각주 목록을 생성한다.
+     * 문서 하단 각주 목록
      */
     if (footnotesInOrder.length) {
-      const items = footnotesInOrder
-        .map(footnote => {
-          /*
-           * 같은 각주가 여러 번 참조되면
-           * ↩a, ↩b, ↩c 형식으로 복귀 링크를 만든다.
-           */
-          const backlinks = footnote.referenceIds
-            .map((referenceId, index) => {
-              const suffix =
-                footnote.referenceIds.length > 1
-                  ? String.fromCharCode(97 + index)
-                  : '';
+      const items =
+        footnotesInOrder
+          .map(footnote => {
+            const backlinks =
+              footnote.referenceIds
+                .map(
+                  (
+                    referenceId,
+                    index
+                  ) => {
+                    const suffix =
+                      footnote
+                        .referenceIds
+                        .length > 1
+                        ? String.fromCharCode(
+                            97 + index
+                          )
+                        : '';
 
-              return (
-                `<a ` +
-                `class="footnote-backref" ` +
-                `href="#${referenceId}" ` +
-                `aria-label="각주 ${footnote.number}의 ` +
-                `${index + 1}번째 참조로 돌아가기">` +
-                `↩${suffix}` +
-                `</a>`
+                    return (
+                      `<a ` +
+                      `class="footnote-backref" ` +
+                      `href="#${referenceId}" ` +
+                      `aria-label="각주 ` +
+                      `${footnote.number}의 ` +
+                      `${index + 1}번째 ` +
+                      `참조로 돌아가기">` +
+                      `↩${suffix}` +
+                      `</a>`
+                    );
+                  }
+                )
+                .join(' ');
+
+            const definition =
+              footnoteDefinitions.get(
+                footnote.label
               );
-            })
-            .join(' ');
 
-          const definition =
-            footnoteDefinitions.get(footnote.label);
-
-          return (
-            `<li id="fn-${footnote.number}">` +
-            `<span class="footnote-text">` +
-            `${inline(definition)}` +
-            `</span> ` +
-            `<span class="footnote-backrefs">` +
-            `${backlinks}` +
-            `</span>` +
-            `</li>`
-          );
-        })
-        .join('\n');
+            return (
+              `<li ` +
+              `id="fn-${footnote.number}">` +
+              `<span ` +
+              `class="footnote-text">` +
+              `${inline(definition)}` +
+              `</span> ` +
+              `<span ` +
+              `class="footnote-backrefs">` +
+              `${backlinks}` +
+              `</span>` +
+              `</li>`
+            );
+          })
+          .join('\n');
 
       html.push(
-        `<section class="footnotes" aria-label="각주">` +
+        `<section ` +
+        `class="footnotes" ` +
+        `aria-label="각주">` +
         `<hr>` +
         `<ol>` +
         `${items}` +
@@ -790,28 +1124,41 @@
   }
 
   function buildTree(items) {
-    const filtered = items.filter(doc => {
-      const query =
-        search.value.trim().toLowerCase();
+    const filtered =
+      items.filter(doc => {
+        const query =
+          search.value
+            .trim()
+            .toLowerCase();
 
-      return (
-        !query ||
-        `${doc.title} ${doc.category} ${(doc.tags || []).join(' ')}`
-          .toLowerCase()
-          .includes(query)
-      );
-    });
+        const searchableText =
+          `${doc.title} ` +
+          `${doc.category} ` +
+          `${(doc.tags || []).join(' ')}`;
+
+        return (
+          !query ||
+          searchableText
+            .toLowerCase()
+            .includes(query)
+        );
+      });
 
     count.textContent =
       `${filtered.length} Document(s)`;
 
-    const groups = filtered.reduce(
-      (result, doc) => {
-        (result[doc.category] ||= []).push(doc);
-        return result;
-      },
-      {}
-    );
+    const groups =
+      filtered.reduce(
+        (result, doc) => {
+          (
+            result[doc.category] ||=
+            []
+          ).push(doc);
+
+          return result;
+        },
+        {}
+      );
 
     tree.innerHTML =
       Object.keys(groups)
@@ -819,18 +1166,27 @@
         .map(category => `
           <section class="category-group">
             <h2>
-              <span aria-hidden="true">▾</span>
+              <span aria-hidden="true">
+                ▾
+              </span>
               ${escapeHtml(category)}
             </h2>
+
             <ul>
               ${groups[category]
                 .map(doc => `
                   <li>
                     <a
-                      href="?doc=${encodeURIComponent(doc.slug)}"
-                      data-slug="${escapeHtml(doc.slug)}"
+                      href="?doc=${encodeURIComponent(
+                        doc.slug
+                      )}"
+                      data-slug="${escapeHtml(
+                        doc.slug
+                      )}"
                     >
-                      ${escapeHtml(doc.title)}
+                      ${escapeHtml(
+                        doc.title
+                      )}
                     </a>
                   </li>
                 `)
@@ -839,15 +1195,23 @@
           </section>
         `)
         .join('') ||
-      '<p class="empty-message">검색 결과가 없습니다.</p>';
+      (
+        '<p class="empty-message">' +
+        '검색 결과가 없습니다.' +
+        '</p>'
+      );
 
     const current =
-      new URLSearchParams(location.search).get('doc') ||
+      new URLSearchParams(
+        location.search
+      ).get('doc') ||
       manifest[0]?.slug;
 
     tree
       .querySelector(
-        `[data-slug="${CSS.escape(current || '')}"]`
+        `[data-slug="${CSS.escape(
+          current || ''
+        )}"]`
       )
       ?.classList.add('current');
   }
@@ -863,87 +1227,108 @@
 
     const counters = [0, 0, 0];
 
-    const entries = headings.map(heading => {
-      const depth =
-        Number(heading.tagName.slice(1)) - 2;
+    const entries =
+      headings.map(heading => {
+        const depth =
+          Number(
+            heading.tagName.slice(1)
+          ) - 2;
 
-      counters[depth] += 1;
+        counters[depth] += 1;
 
-      for (
-        let i = depth + 1;
-        i < counters.length;
-        i++
-      ) {
-        counters[i] = 0;
-      }
-
-      for (let i = 0; i < depth; i++) {
-        if (counters[i] === 0) {
-          counters[i] = 1;
+        for (
+          let i = depth + 1;
+          i < counters.length;
+          i++
+        ) {
+          counters[i] = 0;
         }
-      }
 
-      const number = counters
-        .slice(0, depth + 1)
-        .join('.');
+        for (
+          let i = 0;
+          i < depth;
+          i++
+        ) {
+          if (counters[i] === 0) {
+            counters[i] = 1;
+          }
+        }
 
-      const title = heading.textContent
-        .replace(/#$/, '')
-        .trim();
+        const number =
+          counters
+            .slice(0, depth + 1)
+            .join('.');
 
-      heading.id = `sec-${number}`;
+        const title =
+          heading.textContent
+            .replace(/#$/, '')
+            .trim();
 
-      const headingAnchor =
-        heading.querySelector('.heading-anchor');
+        heading.id = `sec-${number}`;
 
-      if (headingAnchor) {
-        headingAnchor.setAttribute(
-          'href',
-          `#${number}`
+        const headingAnchor =
+          heading.querySelector(
+            '.heading-anchor'
+          );
+
+        if (headingAnchor) {
+          headingAnchor.setAttribute(
+            'href',
+            `#${number}`
+          );
+        }
+
+        const numberNode =
+          document.createElement(
+            'span'
+          );
+
+        numberNode.className =
+          'section-number';
+
+        numberNode.setAttribute(
+          'aria-hidden',
+          'true'
         );
-      }
 
-      const numberNode =
-        document.createElement('span');
+        numberNode.textContent =
+          number;
 
-      numberNode.className = 'section-number';
-      numberNode.setAttribute(
-        'aria-hidden',
-        'true'
-      );
-      numberNode.textContent = number;
+        heading.prepend(
+          numberNode
+        );
 
-      heading.prepend(numberNode);
+        return {
+          heading,
+          depth,
+          number,
+          title
+        };
+      });
 
-      return {
-        heading,
-        depth,
-        number,
-        title
-      };
-    });
-
-    toc.innerHTML = entries
-      .map(({
-        heading,
-        depth,
-        number,
-        title
-      }) => (
-        `<a ` +
-        `class="toc-level-${depth + 2}" ` +
-        `href="#${heading.id}">` +
-        `<span>${number}</span>` +
-        `${escapeHtml(title)}` +
-        `</a>`
-      ))
-      .join('');
+    toc.innerHTML =
+      entries
+        .map(({
+          heading,
+          depth,
+          number,
+          title
+        }) => (
+          `<a ` +
+          `class="toc-level-${depth + 2}" ` +
+          `href="#${heading.id}">` +
+          `<span>${number}</span>` +
+          `${escapeHtml(title)}` +
+          `</a>`
+        ))
+        .join('');
   }
 
   function scrollToCurrentSection(
     behavior = 'smooth'
   ) {
-    const rawHash = location.hash.slice(1);
+    const rawHash =
+      location.hash.slice(1);
 
     if (!rawHash) {
       window.scrollTo({
@@ -957,7 +1342,8 @@
     let id;
 
     try {
-      id = decodeURIComponent(rawHash);
+      id =
+        decodeURIComponent(rawHash);
     } catch {
       id = rawHash;
     }
@@ -979,21 +1365,25 @@
   }
 
   function handleSectionLink(event) {
-    const link = event.target.closest(
-      'a[href^="#"]'
-    );
+    const link =
+      event.target.closest(
+        'a[href^="#"]'
+      );
 
     if (!link) {
       return;
     }
 
     const rawId =
-      link.getAttribute('href').slice(1);
+      link
+        .getAttribute('href')
+        .slice(1);
 
     let id;
 
     try {
-      id = decodeURIComponent(rawId);
+      id =
+        decodeURIComponent(rawId);
     } catch {
       id = rawId;
     }
@@ -1008,7 +1398,9 @@
     event.preventDefault();
 
     const url =
-      new URL(window.location.href);
+      new URL(
+        window.location.href
+      );
 
     url.hash = id;
 
@@ -1029,7 +1421,9 @@
     updateHistory = false
   ) {
     const doc =
-      manifest.find(item => item.slug === slug) ||
+      manifest.find(
+        item => item.slug === slug
+      ) ||
       manifest[0];
 
     if (!doc) {
@@ -1037,9 +1431,10 @@
     }
 
     try {
-      const response = await fetch(
-        `../content/${doc.file}`
-      );
+      const response =
+        await fetch(
+          `../content/${doc.file}`
+        );
 
       if (!response.ok) {
         throw new Error(
@@ -1047,14 +1442,26 @@
         );
       }
 
-      const parsed = parseFrontMatter(
-        await response.text()
-      );
+      const parsed =
+        parseFrontMatter(
+          await response.text()
+        );
 
       const tags =
-        Array.isArray(parsed.meta.tags)
+        Array.isArray(
+          parsed.meta.tags
+        )
           ? parsed.meta.tags
           : doc.tags || [];
+
+      /*
+       * Markdown을 HTML로 변환한 다음
+       * 안전 검사를 수행한다.
+       */
+      const renderedBody =
+        sanitizeRenderedHtml(
+          markdown(parsed.body)
+        );
 
       article.innerHTML = `
         <nav
@@ -1063,13 +1470,18 @@
         >
           <a href="./">Docs</a>
           <span>/</span>
-          <span>${escapeHtml(doc.category)}</span>
+          <span>
+            ${escapeHtml(
+              doc.category
+            )}
+          </span>
         </nav>
 
         <header class="article-header">
           <h1>
             ${escapeHtml(
-              parsed.meta.title || doc.title
+              parsed.meta.title ||
+              doc.title
             )}
           </h1>
 
@@ -1082,50 +1494,71 @@
           </p>
 
           <div class="article-meta">
-            <time datetime="${escapeHtml(doc.date)}">
+            <time
+              datetime="${escapeHtml(
+                doc.date
+              )}"
+            >
               ${escapeHtml(
-                doc.date.replaceAll('-', '. ')
+                doc.date.replaceAll(
+                  '-',
+                  '. '
+                )
               )}
             </time>
 
             <span>
-              Sort: ${escapeHtml(doc.category)}
+              Sort:
+              ${escapeHtml(
+                doc.category
+              )}
             </span>
           </div>
 
           <div class="article-tags">
             ${tags
               .map(tag =>
-                `<span>${escapeHtml(tag)}</span>`
+                `<span>` +
+                `${escapeHtml(tag)}` +
+                `</span>`
               )
               .join('')}
           </div>
         </header>
 
         <div class="article-content">
-          ${markdown(parsed.body)}
+          ${renderedBody}
         </div>
 
         <footer class="article-footer">
           <p>
-            This document is maintained in
-            original Markdown format.
+            This document is maintained
+            in original Markdown format.
           </p>
 
-          <a href="../content/${encodeURI(doc.file)}">
+          <a
+            href="../content/${encodeURI(
+              doc.file
+            )}"
+          >
             Raw Markdown
           </a>
         </footer>
       `;
 
       document.title =
-        `${doc.title} · Coldie's Webpage · Docs`;
+        `${doc.title} · ` +
+        `Coldie's Webpage · Docs`;
 
       if (updateHistory) {
         history.pushState(
-          {slug: doc.slug},
+          {
+            slug: doc.slug
+          },
           '',
-          `?doc=${encodeURIComponent(doc.slug)}`
+          `?doc=${encodeURIComponent(
+            doc.slug
+          )}`
         );
       }
 
@@ -1133,13 +1566,16 @@
       buildToc();
 
       try {
-        const MathJax = await ensureMathJax();
+        const MathJax =
+          await ensureMathJax();
 
         await MathJax.typesetPromise([
           article
         ]);
       } catch (error) {
-        console.warn(error.message);
+        console.warn(
+          error.message
+        );
       }
 
       closeMobileSidebar();
@@ -1148,14 +1584,24 @@
         preventScroll: true
       });
 
-      requestAnimationFrame(() =>
-        scrollToCurrentSection('smooth')
+      requestAnimationFrame(
+        () =>
+          scrollToCurrentSection(
+            'smooth'
+          )
       );
     } catch (error) {
       article.innerHTML = `
         <div class="error-state">
-          <h1>문서를 열 수 없습니다.</h1>
-          <p>${escapeHtml(error.message)}</p>
+          <h1>
+            문서를 열 수 없습니다.
+          </h1>
+
+          <p>
+            ${escapeHtml(
+              error.message
+            )}
+          </p>
         </div>
       `;
     }
@@ -1163,6 +1609,7 @@
 
   function openMobileSidebar() {
     sidebar.classList.add('open');
+
     backdrop.hidden = false;
 
     sidebarToggle.setAttribute(
@@ -1172,7 +1619,10 @@
   }
 
   function closeMobileSidebar() {
-    sidebar.classList.remove('open');
+    sidebar.classList.remove(
+      'open'
+    );
+
     backdrop.hidden = true;
 
     sidebarToggle.setAttribute(
@@ -1192,13 +1642,16 @@
   );
 
   /*
-   * 제목 링크와 각주 링크를 처리한다.
+   * TOC, 제목, 각주 및 각주 복귀 링크를
+   * 같은 방식으로 처리한다.
    */
   article.addEventListener(
     'click',
     event => {
       if (
-        event.target.closest('a[href^="#"]')
+        event.target.closest(
+          'a[href^="#"]'
+        )
       ) {
         handleSectionLink(event);
       }
@@ -1208,9 +1661,10 @@
   tree.addEventListener(
     'click',
     event => {
-      const link = event.target.closest(
-        'a[data-slug]'
-      );
+      const link =
+        event.target.closest(
+          'a[data-slug]'
+        );
 
       if (!link) {
         return;
@@ -1254,18 +1708,21 @@
   );
 
   Promise.all([
-    fetch('../content/manifest.json')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(
-            '문서 목록을 불러오지 못했습니다.'
-          );
-        }
+    fetch(
+      '../content/manifest.json'
+    ).then(response => {
+      if (!response.ok) {
+        throw new Error(
+          '문서 목록을 불러오지 못했습니다.'
+        );
+      }
 
-        return response.json();
-      }),
+      return response.json();
+    }),
 
-    fetch('../content/math-preamble.tex')
+    fetch(
+      '../content/math-preamble.tex'
+    )
       .then(response =>
         response.ok
           ? response.text()
@@ -1277,7 +1734,8 @@
       mathPreamble =
         usablePreamble(preamble);
 
-      manifest = data.documents;
+      manifest =
+        data.documents;
 
       buildTree(manifest);
 
@@ -1292,8 +1750,15 @@
     .catch(error => {
       article.innerHTML = `
         <div class="error-state">
-          <h1>Docs를 시작할 수 없습니다.</h1>
-          <p>${escapeHtml(error.message)}</p>
+          <h1>
+            Docs를 시작할 수 없습니다.
+          </h1>
+
+          <p>
+            ${escapeHtml(
+              error.message
+            )}
+          </p>
         </div>
       `;
     });
