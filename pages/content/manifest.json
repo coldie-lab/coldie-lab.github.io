@@ -1,6 +1,17 @@
 {
   "documents": [
     {
+      "slug": "20261005-edl-cal",
+      "file": "echem-lab/20261005-edl-cal.md",
+      "title": "Potential-Distance Profile Calculation",
+      "category": "ECHEM LAB",
+      "date": "2026-10-05",
+      "tags": [
+        "Electrochemistry"
+      ],
+      "summary": "Obtain the Potential-Distance Profile using Gouy–Chapman model."
+    },
+    {
       "slug": "jun-huang-2026",
       "file": "echem-lab/jun-huang-2026.md",
       "title": "Jun Huang Studies",
