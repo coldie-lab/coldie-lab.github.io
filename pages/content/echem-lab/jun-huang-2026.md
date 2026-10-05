@@ -50,6 +50,7 @@ Studying the researches and treatments of Jun Huang.
 - [Slides](https://drive.google.com/file/d/1Qb9sD_xn1G1pIuBYBNfn9x6eEuKTik-w/view?usp=drive_link) (rev. 23/09/26)
 - [Supporting Information](https://drive.google.com/file/d/1A4oGHzcCV8KIa6Uh6eHaeh_zhbZi5hHG/view?usp=drive_link) (rev. 23/09/26)
 ### Session 3
+- [Slides](https://drive.google.com/file/d/1oY8-thD9-mMwp1ikzIHoyZr98R-ISsxh/view?usp=drive_link) (rev. 05/10/26)
 ### Session 4
 ### Session 5
 
