@@ -13,13 +13,14 @@ Studying the researches and treatments of Jun Huang.
 
 ## Syllabus
 
-| Session | Date/Time | Theme | References |
-| --- | --- | --- | --- |
-| 1 | 16/09/26, 15:00 | IHP at Pt(111)–Aqueous Solution Interfaces | [*JACS Au* **2023**, *3* (2), 550–564.](https://doi.org/10.1021/jacsau.2c00650) |
-| 2 | 28/09/26, 14:30 | EDL to Kinetics: Mixed Quantum-Classical Treatments | [*J. Chem. Phys.* **2020**, *153* (16), 164707.](https://doi.org/10.1063/5.0009582) |
-| 3 | 06/10/26, 15:00 | Parameterization for Electron Transfer with *Ab Initio* DFT/MD | [*Chem. Rev.* **2026**, *126* (13), 7407–7464.](https://doi.org/10.1021/acs.chemrev.5c00926) |
-| 4 | 26/10/26, 14:00 | Water Splitting by EDL Overlapping | [*J. Am. Chem. Soc.* **2024**, *146* (29), 19720–19727.](https://doi.org/10.1021/jacs.4c01070)<br>[*ACS Energy Lett.* **2026**, *11* (8), 5743–5751.](https://doi.org/10.1021/acsenergylett.6c01492) |
-| 5 | 02/11/26, 14:00 | Impedance Responses of Electrochemical Interfaces | [*J. Chem. Phys.* **2022**, *157* (18), 184704.](https://doi.org/10.1063/5.0119592) |
+| Session | Date/Time | Presenter | Theme | References |
+| --- | --- | --- | --- | --- |
+| 1 | 16/09/26, 15:00 | Haechan Kim | IHP at Pt(111)–Aqueous Solution Interfaces | [*JACS Au* **2023**, *3* (2), 550–564.](https://doi.org/10.1021/jacsau.2c00650) |
+| 2 | 28/09/26, 14:30 | Haechan Kim | EDL to Kinetics: Mixed Quantum-Classical Treatments | [*J. Chem. Phys.* **2020**, *153* (16), 164707.](https://doi.org/10.1063/5.0009582) |
+| 3 | 06/10/26, 15:00 | Haechan Kim | Parameterization for Electron Transfer with *Ab Initio* DFT/MD | [*Chem. Rev.* **2026**, *126* (13), 7407–7464.](https://doi.org/10.1021/acs.chemrev.5c00926) |
+| (*) | 14/10/26, 15:00 | Sangwon Bae | Researches and Treatments of Hyungjun Kim (KAIST) Lab. | [https://www.m-design-lab.net](https://www.m-design-lab.net) |
+| 4 | 26/10/26, 14:00 | Sojin Park | Water Splitting by EDL Overlapping | [*J. Am. Chem. Soc.* **2024**, *146* (29), 19720–19727.](https://doi.org/10.1021/jacs.4c01070)<br>[*ACS Energy Lett.* **2026**, *11* (8), 5743–5751.](https://doi.org/10.1021/acsenergylett.6c01492) |
+| 5 | 02/11/26, 14:00 | Woo Yeoul Shim | Impedance Responses of Electrochemical Interfaces | [*J. Chem. Phys.* **2022**, *157* (18), 184704.](https://doi.org/10.1063/5.0119592) |
 
 ## Debates and Discussions
 
